@@ -1,0 +1,11 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+
+/* Move content down for navbar */
+body {
+  padding-top: 5rem;
+}
+
+a.deco-none {
+  color: inherit;
+  text-decoration:none;
+}

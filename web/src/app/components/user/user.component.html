@@ -1,0 +1,11 @@
+<div *ngIf="user">
+  <p>{{user.name}}</p>
+  <p>You currently have {{user.funds}} FauxCoins in your account</p>
+  <p>Get trading!</p>
+</div>
+
+<div *ngFor="let coin of coins">
+  <p>{{coin.name}} - {{coin.value}}</p>
+  <button class="btn" (click)="buyCoin(coin)">BUY</button>
+  <button class="btn" (click)="sellCoin(coin)">SELL</button>
+</div>
