@@ -138,6 +138,14 @@ app.get('/api/users/:userId', function(req, res) {
 	});
 });
 
+app.get('/api/users/:userId/value', function(req, res) {
+  var sql = "SELECT value,date FROM user_value WHERE user_id=?";
+  var data = [req.params.userId];
+  sqlQuery(sql,data,res,function(result){
+		success(res,{values:result});
+	});
+});
+
 app.get('/api/users/:userId/coins', function(req, res) {
 	var sql = "SELECT * FROM user_coin JOIN coin ON id=coin_id WHERE user_id=?";
 	var data = [req.params.userId];
@@ -159,6 +167,14 @@ app.get('/api/coins', function(req, res) {
 	var data = [];
 	sqlQuery(sql,data,res,function(result){
 		success(res,{coins:result});
+	});
+});
+
+app.get('/api/coins/:coinId/value', function(req, res) {
+  var sql = "SELECT value,date FROM coin_value WHERE coin_id=?";
+  var data = [req.params.coinId];
+  sqlQuery(sql,data,res,function(result){
+		success(res,{values:result});
 	});
 });
 
