@@ -243,7 +243,11 @@ app.post('/api/buy/:coinId', function(req, res) {
 								sql = "UPDATE coin SET value=value+? WHERE id=?";
 								data = [valueChange,coinId];
 								sqlQuery(sql,data,res,function(result){
-									success(res,null);
+									sql = "INSERT INTO trade (type,coin_id,user_id,amount,coin_value) VALUES (1,?,?,?,?)";
+                  data = [coinId,userId,amount,coinValue];
+                  sqlQuery(sql,data,res,function(result){
+                    success(res,null);
+                  });
 								});
 							});
 						});
@@ -292,7 +296,11 @@ app.post('/api/sell/:coinId', function(req, res) {
 								sql = "UPDATE coin SET value=value-? WHERE id=?";
 								data = [valueChange,coinId];
 								sqlQuery(sql,data,res,function(result){
-									success(res,null);
+                  sql = "INSERT INTO trade (type,coin_id,user_id,amount,coin_value) VALUES (2,?,?,?,?)";
+                  data = [coinId,userId,amount,coinValue];
+                  sqlQuery(sql,data,res,function(result){
+                    success(res,null);
+                  });
 								});
 							});
 						});
