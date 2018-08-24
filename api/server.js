@@ -317,6 +317,31 @@ app.post('/api/sell/:coinId', function(req, res) {
 	});
 });
 
+app.get('/api/trades', function(req, res) {
+	var sql = "SELECT * FROM trade";
+  var data = [];
+
+  var where = [];
+  if(req.query.coinId){
+    where.push("coin_id=?");
+    data.push(req.query.coinId);
+  }
+  if(req.query.userId){
+    where.push("user_id=?");
+    data.push(req.query.userId);
+  }
+
+  if(where.length > 0){
+    sql += " WHERE " + where.join(" AND ");
+  }
+
+  sql += " ORDER BY date DESC";
+
+	sqlQuery(sql,data,res,function(result){
+		success(res,{trades:result});
+	});
+});
+
 app.get('/api/*', function(req, res) {
 	var cmd = req.originalUrl.split('/api/',2)[1];
 	error(res,'Endpoint does not exist: ' + cmd);
