@@ -3,6 +3,7 @@ export class Coin {
   name:string;
   value:number;
   value24h:number;
+  chart:any;
 
   constructor(json:any) {
     this.id = json.id;

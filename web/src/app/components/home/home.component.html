@@ -8,7 +8,7 @@
 <div class="row mb-5" align="center">
   <div class="col-md-4" *ngFor="let coin of coins | slice:0:3">
     <h2>{{coin.name}}</h2>
-    <img src="https://datavizcatalogue.com/methods/images/top_images/line_graph.png" style="width:100%;">
+    <canvas id="coin-chart-{{ coin.id }}">{{ coin.chart }}</canvas>
     <h4>{{coin.value}}</h4>
     <span>{{coin.value-coin.value24h}}</span>
   </div>

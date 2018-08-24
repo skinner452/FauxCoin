@@ -24,9 +24,19 @@ export class ApiService {
     return this.http.get(url).pipe(map(res => res.json().data.user as User));
   }
 
+  getUserValues(userId:number): Observable<any[]>{
+    let url:string = API_URL + "/users/" + userId + "/values";
+    return this.http.get(url).pipe(map(res => res.json().data.values as any[]));
+  }
+
   getCoins(): Observable<Coin[]>{
     let url:string = API_URL + "/coins";
     return this.http.get(url).pipe(map(res => res.json().data.coins as Coin[]));
+  }
+
+  getCoinValues(coinId:number): Observable<any[]>{
+    let url:string = API_URL + "/coins/" + coinId + "/values";
+    return this.http.get(url).pipe(map(res => res.json().data.values as any[]));
   }
 
   buyCoin(coinId:number,amount:number): Observable<JSON>{

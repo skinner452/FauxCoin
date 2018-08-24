@@ -138,7 +138,7 @@ app.get('/api/users/:userId', function(req, res) {
 	});
 });
 
-app.get('/api/users/:userId/value', function(req, res) {
+app.get('/api/users/:userId/values', function(req, res) {
   var sql = "SELECT value,date FROM user_value WHERE user_id=?";
   var data = [req.params.userId];
   sqlQuery(sql,data,res,function(result){
@@ -170,8 +170,8 @@ app.get('/api/coins', function(req, res) {
 	});
 });
 
-app.get('/api/coins/:coinId/value', function(req, res) {
-  var sql = "SELECT value,date FROM coin_value WHERE coin_id=?";
+app.get('/api/coins/:coinId/values', function(req, res) {
+  var sql = "SELECT value,date FROM coin_value WHERE coin_id=? AND date>now()-INTERVAL 24 HOUR";
   var data = [req.params.coinId];
   sqlQuery(sql,data,res,function(result){
 		success(res,{values:result});
