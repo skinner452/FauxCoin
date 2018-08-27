@@ -10,7 +10,7 @@
     <h2>{{coin.name}}</h2>
     <canvas id="coin-chart-{{ coin.id }}">{{ coin.chart }}</canvas>
     <h4>{{coin.value}}</h4>
-    <span>{{coin.value-coin.value24h}}</span>
+    <span>{{coin.getChange()}}</span>
   </div>
 </div>
 
@@ -25,8 +25,7 @@
     <tr *ngFor="let coin of coins">
       <th scope="row"><a class="deco-none" href="/trade/{{coin.id}}">{{coin.name}}</a></th>
       <td>{{coin.value}}</td>
-      <td>{{coin.value-coin.value24h}}</td>
-      <!-- <td>{{coin.getChange()}}</td> -->
+      <td>{{coin.getChange()}}</td>
     </tr>
   </tbody>
 </table>

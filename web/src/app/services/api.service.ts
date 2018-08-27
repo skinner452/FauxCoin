@@ -31,7 +31,14 @@ export class ApiService {
 
   getCoins(): Observable<Coin[]>{
     let url:string = API_URL + "/coins";
-    return this.http.get(url).pipe(map(res => res.json().data.coins as Coin[]));
+    return this.http.get(url).pipe(map(res => {
+      let array = res.json().data.coins;
+      let coins = [];
+      array.forEach(object => {
+        coins.push(new Coin(object));
+      });
+      return coins;
+    }));
   }
 
   getCoinValues(coinId:number): Observable<any[]>{
