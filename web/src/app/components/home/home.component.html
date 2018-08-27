@@ -8,9 +8,10 @@
 <div class="row mb-5" align="center">
   <div class="col-md-4" *ngFor="let coin of coins | slice:0:3">
     <h2>{{coin.name}}</h2>
+    <small>24h</small>
     <canvas id="coin-chart-{{ coin.id }}">{{ coin.chart }}</canvas>
     <h4>{{coin.value}}</h4>
-    <span>{{coin.getChange()}}</span>
+    <small>{{coin.getChange()}}</small>
   </div>
 </div>
 

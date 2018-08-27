@@ -1,3 +1,5 @@
+import { Chart } from 'chart.js';
+
 export class Coin {
   id:number;
   name:string;
@@ -16,5 +18,46 @@ export class Coin {
     let change = this.value-this.value24h;
     if(change >= 0) return '+' + change;
     return change;
+  }
+
+  createChart(apiService,color){
+    apiService.getCoinValues(this.id).subscribe((values) => {
+      let dates = values.map(value => value.date);
+      let data = values.map(value => value.value);
+    
+      let labels = [];
+      dates.forEach(date => {
+        date = new Date(date);
+        labels.push(date.toLocaleTimeString('en', { year: 'numeric', month: 'short', day: 'numeric' }));
+      });
+    
+      this.chart = new Chart('coin-chart-' + this.id, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              data: data,
+              borderColor: color,
+              fill: false,
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          legend: {
+            display: false
+          },
+          scales: {
+            xAxes: [{
+              display: false
+            }],
+            yAxes: [{
+              display: true
+            }],
+          }
+        }
+      });
+    });
   }
 }

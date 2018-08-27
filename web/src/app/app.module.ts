@@ -17,6 +17,7 @@ const appRoutes: Routes = [
   {path:'',component:HomeComponent},
   {path:'user',component:UserComponent},
   {path:'trade',component:TradeComponent},
+  {path:'trade/:coinId',component:TradeComponent},
   {path:'profile',component:ProfileComponent},
   {path:'leaderboard',component:LeaderboardComponent},
   {path:'settings',component:SettingsComponent}

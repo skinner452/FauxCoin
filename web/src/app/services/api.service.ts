@@ -29,6 +29,17 @@ export class ApiService {
     return this.http.get(url).pipe(map(res => res.json().data.values as any[]));
   }
 
+  getCoin(id:number): Observable<Coin>{
+    let url:string = API_URL + "/coins/" + id;
+    return this.http.get(url).pipe(map(res => {
+      if(res.json().data){
+        return new Coin(res.json().data.coin);
+      } else {
+        return null;
+      }
+    }));
+  }
+
   getCoins(): Observable<Coin[]>{
     let url:string = API_URL + "/coins";
     return this.http.get(url).pipe(map(res => {
