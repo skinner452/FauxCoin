@@ -15,6 +15,7 @@
 </table>
 
 <div *ngIf="coin">
+  <h2>{{ coin.name }}</h2>
   <div class="row">
     <div class="col-md-9">
       <canvas id="coin-chart-{{ coin.id }}">{{ coin.chart }}</canvas>
@@ -27,11 +28,10 @@
           <th scope="col">Total</th>
         </thead>
         <tbody>
-          <tr *ngFor="let coin of coins">
-            <td width="34%">20</td>
-            <td width="33%">1.234</td>
-            <td width="33%">24.68</td>
-            <!-- <td>{{coin.getChange()}}</td> -->
+          <tr *ngFor="let trade of trades">
+            <td width="34%">{{ trade.amount }}</td>
+            <td width="33%">{{ trade.coinValue }}</td>
+            <td width="33%">{{ trade.getTotal() }}</td>
           </tr>
         </tbody>
       </table>

@@ -337,6 +337,11 @@ app.get('/api/trades', function(req, res) {
 
   sql += " ORDER BY date DESC";
 
+  if(req.query.limit && Number.isInteger(req.query.limit)){
+    sql += " LIMIT ?";
+    data.push(parseInt(req.query.limit));
+  }
+
 	sqlQuery(sql,data,res,function(result){
 		success(res,{trades:result});
 	});

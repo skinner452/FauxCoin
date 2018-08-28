@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Coin } from '../../models/coin';
+import { Trade } from '../../models/trade';
 
 import { ActivatedRoute } from '@angular/router';
 
@@ -14,6 +15,7 @@ export class TradeComponent implements OnInit {
 
   coins:Coin[];
   coin:Coin;
+  trades:Trade[];
 
   constructor(private route: ActivatedRoute, private apiService:ApiService) { }
 
@@ -34,8 +36,10 @@ export class TradeComponent implements OnInit {
       this.apiService.getCoin(this.coinId).subscribe((coin) => {
         this.coin = coin;
         this.coin.createChart(this.apiService,'#3cba9f')
-      })
+      });
+      this.apiService.getTrades({coinId:this.coinId}).subscribe((trades) => {
+        this.trades = trades;
+      });
     }
   }
-
 }
