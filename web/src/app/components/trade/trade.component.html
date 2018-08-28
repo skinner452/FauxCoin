@@ -15,12 +15,13 @@
 </table>
 
 <div *ngIf="coin">
-  <h2>{{ coin.name }}</h2>
   <div class="row">
     <div class="col-md-9">
+      <h2>{{ coin.name }}</h2>
       <canvas id="coin-chart-{{ coin.id }}">{{ coin.chart }}</canvas>
     </div>
     <div class="col-md-3">
+      <h2>Trades</h2>
       <table class="table table-striped" style="text-align: center">
         <thead class="thead-dark">
           <th scope="col">Amount</th>
@@ -40,10 +41,26 @@
 
   <div class="row">
     <div class="col-md-6">
-      <h2>Buy</h2>
+      <h3>Buy</h3>
+      <small>{{user.funds}} FauxCoins owned</small>
+      <form (ngSubmit)="onBuy()">
+          <div class="form-group">
+            <label for="buyValue">Value</label>
+            <input type="text"  class="form-control" id="buyValue" [(ngModel)]="buyModel.value" name="buyValue" disabled>
+          </div>
+          <div class="form-group">
+            <label for="buyAmount">Amount</label>
+            <input type="text"  class="form-control" id="buyAmount" [(ngModel)]="buyModel.amount" name="buyAmount" (keyup)="updateBuyTotal()">
+          </div>
+          <div class="form-group">
+            <label for="buyTotal">Total</label>
+            <input type="text"  class="form-control" id="buyTotal" [(ngModel)]="buyModel.total" name="buyTotal" disabled>
+          </div>
+          <button type="submit" class="btn btn-success" style="width:100%">Buy</button>
+      </form>
     </div>
     <div class="col-md-6">
-      <h2>Sell</h2>
+      <h3>Sell</h3>
     </div>
   </div>
 </div>
