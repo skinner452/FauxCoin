@@ -21,11 +21,11 @@ var db = mysql.createConnection({
   database: "fauxcoin"
 });
 db.connect(function(err) {
-	if(err){
-		console.log(err);
-	} else {
-		console.log("MYSQL CONNECTED");
-	}
+  if(err){
+    console.log(err);
+  } else {
+    console.log("MYSQL CONNECTED");
+  }
 });
 
 app.use(express.static(__dirname + '/public'));                 // set the static files location /public/img will be /img for users
@@ -46,12 +46,12 @@ var usertest = {id:1,username:'test','password':'test123'};
 
 // passport
 passport.serializeUser(function(user, done) {
-	done(null, user.id);
+  done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-	done(null,usertest);
-	
+  done(null,usertest);
+  
   // User.findById(id, function(err, user) {
     // done(err, user);
   // });
@@ -59,8 +59,8 @@ passport.deserializeUser(function(id, done) {
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
-	  done(null,usertest);
-	  
+    done(null,usertest);
+    
       // UserDetails.findOne({
         // username: username
       // }, function(err, user) {
@@ -95,230 +95,234 @@ app.get('/error', (req, res) => res.send("error logging in"));
 // api ---------------------------------------------------------------------
 
 function sqlQuery(sql,data,res,cb){
-	db.query(sql, data, function(err, result) {
-		if(err){
-			error(res,err);
-		} else {
-			cb(result);
-		}
-	});
+  db.query(sql, data, function(err, result) {
+    if(err){
+      error(res,err);
+    } else {
+      cb(result);
+    }
+  });
 }
 
 function success(res,data){
-	res.json({status:"success",data:data});
+  res.json({status:"success",data:data});
 }
 
 // invalid parameters
 function fail(res,err){
-	res.json({status:"fail",message:err});
+  res.json({status:"fail",message:err});
 }
 
 // all other errors
 function error(res,err){
-	res.json({status:"error",message:err});
+  res.json({status:"error",message:err});
 }
 
 app.get('/api/users', function(req, res) {
-	var sql = "SELECT * FROM user";
-	var data = [];
-	sqlQuery(sql,data,res,function(result){
-		success(res,{users:result});
-	});
+  var sql = "SELECT * FROM user";
+  var data = [];
+  sqlQuery(sql,data,res,function(result){
+    success(res,{users:result});
+  });
 });
 
 app.get('/api/users/:userId', function(req, res) {
-	var sql = "SELECT * FROM user WHERE id=?";
-	var data = [req.params.userId];
-	sqlQuery(sql,data,res,function(result){
-		if(result.length){
-			success(res,{user:result[0]});
-		} else {
-			error(res,"user not found");
-		}
-	});
+  var sql = "SELECT * FROM user WHERE id=?";
+  var data = [req.params.userId];
+  sqlQuery(sql,data,res,function(result){
+    if(result.length){
+      success(res,{user:result[0]});
+    } else {
+      error(res,"user not found");
+    }
+  });
 });
 
 app.get('/api/users/:userId/values', function(req, res) {
   var sql = "SELECT value,date FROM user_value WHERE user_id=?";
   var data = [req.params.userId];
   sqlQuery(sql,data,res,function(result){
-		success(res,{values:result});
-	});
+    success(res,{values:result});
+  });
 });
 
 app.get('/api/users/:userId/coins', function(req, res) {
-	var sql = "SELECT * FROM user_coin JOIN coin ON id=coin_id WHERE user_id=?";
-	var data = [req.params.userId];
-	sqlQuery(sql,data,res,function(result){
-		success(res,{coins:result});
-	});
+  var sql = "SELECT IFNULL(uc.amount,0) AS amount,c.* FROM user_coin uc JOIN coin c ON c.id=uc.coin_id WHERE uc.user_id=?";
+  var data = [req.params.userId];
+  sqlQuery(sql,data,res,function(result){
+    success(res,{coins:result});
+  });
 });
 
 app.get('/api/users/:userId/coins/:coinId', function(req, res) {
-	var sql = "SELECT * FROM user_coin JOIN coin ON id=coin_id WHERE user_id=? AND coin_id=?";
-	var data = [req.params.userId,req.params.coinId];
-	sqlQuery(sql,data,res,function(result){
-		success(res,{coins:result});
-	});
+  var sql = "SELECT IFNULL(uc.amount,0) AS amount,c.* FROM coin c LEFT JOIN user_coin uc ON uc.coin_id=c.id WHERE c.id = ? AND (uc.user_id=? OR uc.user_id IS NULL)";
+  var data = [req.params.coinId,req.params.userId];
+  sqlQuery(sql,data,res,function(result){
+    if(result.length){
+      success(res,{coin:result[0]});
+    } else {
+      return(res,"coin not owned by user");
+    }
+  });
 });
 
 app.get('/api/coins', function(req, res) {
-	var sql = "SELECT * FROM coin";
-	var data = [];
-	sqlQuery(sql,data,res,function(result){
-		success(res,{coins:result});
-	});
+  var sql = "SELECT * FROM coin";
+  var data = [];
+  sqlQuery(sql,data,res,function(result){
+    success(res,{coins:result});
+  });
 });
 
 app.get('/api/coins/:coinId/values', function(req, res) {
   var sql = "SELECT value,date FROM coin_value WHERE coin_id=? AND date>now()-INTERVAL 24 HOUR";
   var data = [req.params.coinId];
   sqlQuery(sql,data,res,function(result){
-		success(res,{values:result});
-	});
+    success(res,{values:result});
+  });
 });
 
 app.get('/api/coins/:coinId', function(req, res) {
-	var sql = "SELECT * FROM coin WHERE id=?";
-	var data = [req.params.coinId];
-	sqlQuery(sql,data,res,function(result){
-		if(result.length){
-			success(res,{coin:result[0]});
-		} else {
-			error(res,"coin not found");
-		}
-	});
+  var sql = "SELECT * FROM coin WHERE id=?";
+  var data = [req.params.coinId];
+  sqlQuery(sql,data,res,function(result){
+    if(result.length){
+      success(res,{coin:result[0]});
+    } else {
+      error(res,"coin not found");
+    }
+  });
 });
 
 app.post('/api/coins', function(req, res) {
-	if(!req.body.name){
-		fail(res,{name:"A name is required"});
-		return;
-	}
-	
-	if(!req.body.value){
-		fail(res,{name:"A value is required"});
-		return;
-	}
-	
-	var sql = "INSERT INTO coin (name,value) VALUES (?,?)";
-	var data = [req.body.name,req.body.value];
-	sqlQuery(sql,data,res,function(result){
-		success(res,null);
-	});
+  if(!req.body.name){
+    fail(res,{name:"A name is required"});
+    return;
+  }
+  
+  if(!req.body.value){
+    fail(res,{name:"A value is required"});
+    return;
+  }
+  
+  var sql = "INSERT INTO coin (name,value) VALUES (?,?)";
+  var data = [req.body.name,req.body.value];
+  sqlQuery(sql,data,res,function(result){
+    success(res,null);
+  });
 });
 
 app.post('/api/buy/:coinId', function(req, res) {
-	if(!req.body.amount){
-		fail(res,{amount:"An amount is required"});
-		return;
-	}
-	
-	var userId = 1;
-	var coinId = req.params.coinId;
-	var amount = req.body.amount;
-	
-	var sql = "SELECT funds FROM user WHERE id=?";
-	var data = [userId];
-	sqlQuery(sql,data,res,function(result){
-		if(result.length){
-			var funds = result[0].funds;
-			
-			sql = "SELECT value FROM coin WHERE id=?";
-			data = [coinId];
-			sqlQuery(sql,data,res,function(result){
-				if(result.length){
-					var coinValue = result[0].value;
-					var totalValue = coinValue*amount*1.01;
-					
-					var newFunds = funds-totalValue;
-					if(newFunds >= 0){
-						sql = "UPDATE user SET funds=?";
-						data = [newFunds];
-						sqlQuery(sql,data,res,function(result){
-							sql = "INSERT INTO user_coin (user_id,coin_id,amount) VALUES (?,?,?) ON DUPLICATE KEY UPDATE amount = amount + ?";
-							data = [userId,coinId,amount,amount];
-							sqlQuery(sql,data,res,function(result){
-								var valueChange = 0.01*amount;
-								sql = "UPDATE coin SET value=value+? WHERE id=?";
-								data = [valueChange,coinId];
-								sqlQuery(sql,data,res,function(result){
-									sql = "INSERT INTO trade (type,coin_id,user_id,amount,coin_value) VALUES (1,?,?,?,?)";
+  if(!req.body.amount){
+    fail(res,{amount:"An amount is required"});
+    return;
+  }
+  
+  var userId = 1;
+  var coinId = req.params.coinId;
+  var amount = req.body.amount;
+  
+  var sql = "SELECT funds FROM user WHERE id=?";
+  var data = [userId];
+  sqlQuery(sql,data,res,function(result){
+    if(result.length){
+      var funds = result[0].funds;
+      
+      sql = "SELECT value FROM coin WHERE id=?";
+      data = [coinId];
+      sqlQuery(sql,data,res,function(result){
+        if(result.length){
+          var coinValue = result[0].value;
+          var totalValue = coinValue*amount*1.01;
+          
+          var newFunds = funds-totalValue;
+          if(newFunds >= 0){
+            sql = "UPDATE user SET funds=?";
+            data = [newFunds];
+            sqlQuery(sql,data,res,function(result){
+              sql = "INSERT INTO user_coin (user_id,coin_id,amount) VALUES (?,?,?) ON DUPLICATE KEY UPDATE amount = amount + ?";
+              data = [userId,coinId,amount,amount];
+              sqlQuery(sql,data,res,function(result){
+                var valueChange = 0.01*amount;
+                sql = "UPDATE coin SET value=value+? WHERE id=?";
+                data = [valueChange,coinId];
+                sqlQuery(sql,data,res,function(result){
+                  sql = "INSERT INTO trade (type,coin_id,user_id,amount,coin_value) VALUES (1,?,?,?,?)";
                   data = [coinId,userId,amount,coinValue];
                   sqlQuery(sql,data,res,function(result){
                     success(res,null);
                   });
-								});
-							});
-						});
-					} else {
-						error(res,"not enough funds");
-					}
-				} else {
-					error(res,"coin not found");
-				}
-			});
-		} else {
-			error(res,"user not found");
-		}
-	});
+                });
+              });
+            });
+          } else {
+            error(res,"not enough funds");
+          }
+        } else {
+          error(res,"coin not found");
+        }
+      });
+    } else {
+      error(res,"user not found");
+    }
+  });
 });
 
 app.post('/api/sell/:coinId', function(req, res) {
-	if(!req.body.amount){
-		fail(res,{amount:"An amount is required"});
-		return;
-	}
-	
-	var userId = 1;
-	var coinId = req.params.coinId;
-	var amount = req.body.amount;
-	
-	var sql = "SELECT amount FROM user_coin WHERE user_id=? AND coin_id=?";
-	var data = [userId,coinId];
-	sqlQuery(sql,data,res,function(result){
-		if(result.length){
-			if(result[0].amount >= amount){
-				sql = "SELECT value FROM coin WHERE id=?";
-				data = [coinId];
-				sqlQuery(sql,data,res,function(result){
-					if(result.length){
-						var coinValue = result[0].value;
-						var totalValue = coinValue*amount;
-						
-						sql = "UPDATE user SET funds = funds + ? WHERE id=?"
-						data = [totalValue,userId];
-						sqlQuery(sql,data,res,function(result){
-							sql = "UPDATE user_coin SET amount = amount - ? WHERE user_id=? AND coin_id=?";
-							data = [amount,userId,coinId];
-							sqlQuery(sql,data,res,function(result){
-								var valueChange = 0.01*amount;
-								sql = "UPDATE coin SET value=value-? WHERE id=?";
-								data = [valueChange,coinId];
-								sqlQuery(sql,data,res,function(result){
+  if(!req.body.amount){
+    fail(res,{amount:"An amount is required"});
+    return;
+  }
+  
+  var userId = 1;
+  var coinId = req.params.coinId;
+  var amount = req.body.amount;
+  
+  var sql = "SELECT amount FROM user_coin WHERE user_id=? AND coin_id=?";
+  var data = [userId,coinId];
+  sqlQuery(sql,data,res,function(result){
+    if(result.length){
+      if(result[0].amount >= amount){
+        sql = "SELECT value FROM coin WHERE id=?";
+        data = [coinId];
+        sqlQuery(sql,data,res,function(result){
+          if(result.length){
+            var coinValue = result[0].value;
+            var totalValue = coinValue*amount;
+            
+            sql = "UPDATE user SET funds = funds + ? WHERE id=?"
+            data = [totalValue,userId];
+            sqlQuery(sql,data,res,function(result){
+              sql = "UPDATE user_coin SET amount = amount - ? WHERE user_id=? AND coin_id=?";
+              data = [amount,userId,coinId];
+              sqlQuery(sql,data,res,function(result){
+                var valueChange = 0.01*amount;
+                sql = "UPDATE coin SET value=value-? WHERE id=?";
+                data = [valueChange,coinId];
+                sqlQuery(sql,data,res,function(result){
                   sql = "INSERT INTO trade (type,coin_id,user_id,amount,coin_value) VALUES (2,?,?,?,?)";
                   data = [coinId,userId,amount,coinValue];
                   sqlQuery(sql,data,res,function(result){
                     success(res,null);
                   });
-								});
-							});
-						});
-					} else {
-						error(res,"coin not found");
-					}
-				});
-			} else {
-				error(res,"not enough coins");
-			}
-		} else {
-			error(res,"coin not found for user");
-		}
-	});
+                });
+              });
+            });
+          } else {
+            error(res,"coin not found");
+          }
+        });
+      } else {
+        error(res,"not enough coins");
+      }
+    } else {
+      error(res,"coin not found for user");
+    }
+  });
 });
 
 app.get('/api/trades', function(req, res) {
-	var sql = "SELECT * FROM trade";
+  var sql = "SELECT * FROM trade";
   var data = [];
 
   var where = [];
@@ -342,70 +346,70 @@ app.get('/api/trades', function(req, res) {
     data.push(parseInt(req.query.limit));
   }
 
-	sqlQuery(sql,data,res,function(result){
-		success(res,{trades:result});
-	});
+  sqlQuery(sql,data,res,function(result){
+    success(res,{trades:result});
+  });
 });
 
 app.get('/api/*', function(req, res) {
-	var cmd = req.originalUrl.split('/api/',2)[1];
-	error(res,'Endpoint does not exist: ' + cmd);
+  var cmd = req.originalUrl.split('/api/',2)[1];
+  error(res,'Endpoint does not exist: ' + cmd);
 });
 
 // application -------------------------------------------------------------
 
 app.get('*', function(req, res) {
-	res.sendFile('../web/public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+  res.sendFile('../public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
 });
 
 // scheduler ---------------------------------------------------------------
 // every 5 minutes
 schedule.scheduleJob('*/5 * * * *', function(){
-	// return;
+  // return;
 
-	console.log("Saving current coin values");
-	var sql = "SELECT * FROM coin";
-	var data = [];
-	sqlQuery(sql,data,null,function(coins){
-		coins.forEach(coin => {
-			var sql = "INSERT INTO coin_value (coin_id,value) VALUES (?,?)";
-			var data = [coin.id,coin.value];
-			sqlQuery(sql,data,null,function(result){});
+  console.log("Saving current coin values");
+  var sql = "SELECT * FROM coin";
+  var data = [];
+  sqlQuery(sql,data,null,function(coins){
+    coins.forEach(coin => {
+      var sql = "INSERT INTO coin_value (coin_id,value) VALUES (?,?)";
+      var data = [coin.id,coin.value];
+      sqlQuery(sql,data,null,function(result){});
 
-			// get value closest to 24h from now
-			var sql = "SELECT value FROM coin_value WHERE coin_id=? ORDER BY abs(date-(now()-INTERVAL 24 HOUR)) LIMIT 1";
-			var data = [coin.id];
-			sqlQuery(sql,data,null,function(coinValues){
-				var value24h = 0;
-				if(coinValues.length > 0) value24h = coinValues[0].value;
-				var sql = "UPDATE coin SET value24h=? WHERE id=?";
-				var data = [value24h,coin.id];
-				sqlQuery(sql,data,null,function(result){});
-			});
-		});
-	});
+      // get value closest to 24h from now
+      var sql = "SELECT value FROM coin_value WHERE coin_id=? ORDER BY abs(date-(now()-INTERVAL 24 HOUR)) LIMIT 1";
+      var data = [coin.id];
+      sqlQuery(sql,data,null,function(coinValues){
+        var value24h = 0;
+        if(coinValues.length > 0) value24h = coinValues[0].value;
+        var sql = "UPDATE coin SET value24h=? WHERE id=?";
+        var data = [value24h,coin.id];
+        sqlQuery(sql,data,null,function(result){});
+      });
+    });
+  });
 
-	console.log("Saving current user values");
-	var sql = "SELECT * FROM user";
-	var data = [];
-	sqlQuery(sql,data,null,function(users){
-		for(var i = 0; i < users.length; i++){
-			var user = users[i];
-			var value = user.funds;
-			var sql = "SELECT c.value,uc.amount FROM user_coin uc JOIN coin c ON c.id = uc.coin_id WHERE uc.user_id=?";
-			var data = [user.id];
-			sqlQuery(sql,data,null,function(coins){
-				for(var j = 0; j < coins.length; j++){
-					var coin = coins[i];
-					value += (coin.value*coin.amount);
-				}
+  console.log("Saving current user values");
+  var sql = "SELECT * FROM user";
+  var data = [];
+  sqlQuery(sql,data,null,function(users){
+    for(var i = 0; i < users.length; i++){
+      var user = users[i];
+      var value = user.funds;
+      var sql = "SELECT c.value,uc.amount FROM user_coin uc JOIN coin c ON c.id = uc.coin_id WHERE uc.user_id=?";
+      var data = [user.id];
+      sqlQuery(sql,data,null,function(coins){
+        for(var j = 0; j < coins.length; j++){
+          var coin = coins[i];
+          value += (coin.value*coin.amount);
+        }
 
-				var sql = "INSERT INTO user_value (user_id,value) VALUES (?,?)";
-				var data = [user.id,value];
-				sqlQuery(sql,data,null,function(result){});
-			});
-		}
-	});
+        var sql = "INSERT INTO user_value (user_id,value) VALUES (?,?)";
+        var data = [user.id,value];
+        sqlQuery(sql,data,null,function(result){});
+      });
+    }
+  });
 
-	console.log("Done")
+  console.log("Done")
 });

@@ -8,8 +8,7 @@
     <tr *ngFor="let coin of coins">
       <th scope="row"><a class="deco-none" href="/trade/{{coin.id}}">{{coin.name}}</a></th>
       <td>{{coin.value}}</td>
-      <td>{{coin.value-coin.value24h}}</td>
-      <!-- <td>{{coin.getChange()}}</td> -->
+      <td>{{coin.getChange()}}</td>
     </tr>
   </tbody>
 </table>
@@ -61,6 +60,22 @@
     </div>
     <div class="col-md-6">
       <h3>Sell</h3>
+      <small>{{coin.amount}} {{coin.name}}s owned</small>
+      <form (ngSubmit)="onSell()">
+          <div class="form-group">
+            <label for="sellValue">Value</label>
+            <input type="text"  class="form-control" id="sellValue" [(ngModel)]="sellModel.value" name="sellValue" disabled>
+          </div>
+          <div class="form-group">
+            <label for="sellAmount">Amount</label>
+            <input type="text"  class="form-control" id="sellAmount" [(ngModel)]="sellModel.amount" name="sellAmount" (keyup)="updateSellTotal()">
+          </div>
+          <div class="form-group">
+            <label for="sellTotal">Total</label>
+            <input type="text"  class="form-control" id="sellTotal" [(ngModel)]="sellModel.total" name="sellTotal" disabled>
+          </div>
+          <button type="submit" class="btn btn-success" style="width:100%">Sell</button>
+      </form>
     </div>
   </div>
 </div>

@@ -42,6 +42,17 @@ export class ApiService {
     }));
   }
 
+  getUserCoin(userId:number,coinId:number): Observable<Coin>{
+    let url:string = API_URL + "/users/" + userId + "/coins/" + coinId;
+    return this.http.get(url).pipe(map(res => {
+      if(res.json().data){
+        return new Coin(res.json().data.coin);
+      } else {
+        return null;
+      }
+    }));
+  }
+
   getCoin(id:number): Observable<Coin>{
     let url:string = API_URL + "/coins/" + id;
     return this.http.get(url).pipe(map(res => {

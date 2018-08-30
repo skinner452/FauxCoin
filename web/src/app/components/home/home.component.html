@@ -11,7 +11,7 @@
     <small>24h</small>
     <canvas id="coin-chart-{{ coin.id }}">{{ coin.chart }}</canvas>
     <h4>{{coin.value}}</h4>
-    <small>{{coin.getChange()}}</small>
+    <small>{{coin.getChange()}} ({{coin.getPercentChange()}})</small>
   </div>
 </div>
 

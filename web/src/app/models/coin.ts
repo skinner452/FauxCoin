@@ -7,17 +7,32 @@ export class Coin {
   value24h:number;
   chart:any;
 
+  amount:number;
+
   constructor(json:any) {
     this.id = json.id;
     this.name = json.name;
     this.value = json.value;
     this.value24h = json.value24h;
+
+    this.amount = json.amount;
   }
   
   getChange(){
     let change = this.value-this.value24h;
+    change = Math.round(change*100000)/100000;
     if(change >= 0) return '+' + change;
     return change;
+  }
+
+  getPercentChange(){
+    let change = (((this.value/this.value24h)-1)*100);
+    change = Math.round(change*100000)/100000;
+    if(change >= 0){
+      return '+' + change + "%";
+    } else {
+      return change + "%";
+    }
   }
 
   createChart(apiService,color){

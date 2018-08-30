@@ -20,6 +20,7 @@ export class TradeComponent implements OnInit {
   trades:Trade[];
 
   buyModel = new Object();
+  sellModel = new Object();
 
   constructor(private route: ActivatedRoute, private apiService:ApiService) { }
 
@@ -40,12 +41,15 @@ export class TradeComponent implements OnInit {
       this.apiService.getUser(1).subscribe((user) => {
         this.user = user;
       });
-      this.apiService.getCoin(this.coinId).subscribe((coin) => {
+      this.apiService.getUserCoin(1,this.coinId).subscribe((coin) => {
         this.coin = coin;
         this.coin.createChart(this.apiService,'#3cba9f');
 
         this.buyModel['value'] = coin.value;
         this.updateBuyTotal();
+
+        this.sellModel['value'] = coin.value;
+        this.updateSellTotal();
       });
       this.apiService.getTrades({coinId:this.coinId}).subscribe((trades) => {
         this.trades = trades;
@@ -55,8 +59,14 @@ export class TradeComponent implements OnInit {
 
   updateBuyTotal(){
     let value = Number(this.buyModel['value']);
-    let amount = Number(this.buyModel['amount'])
+    let amount = Number(this.buyModel['amount']);
     this.buyModel['total'] = value*amount*1.01;
+  }
+
+  updateSellTotal(){
+    let value = Number(this.sellModel['value']);
+    let amount = Number(this.sellModel['amount']);
+    this.sellModel['total'] = value*amount;
   }
 
   onBuy(){
@@ -65,6 +75,17 @@ export class TradeComponent implements OnInit {
         this.buyModel['value'] = '';
         this.buyModel['amount'] = '';
         this.buyModel['total'] = '';
+        this.loadCoin();
+      }
+    });
+  }
+
+  onSell(){
+    this.apiService.sellCoin(this.coinId,this.sellModel['amount']).subscribe((resp) => {
+      if(resp['status'] == 'success'){
+        this.sellModel['value'] = '';
+        this.sellModel['amount'] = '';
+        this.sellModel['total'] = '';
         this.loadCoin();
       }
     });
