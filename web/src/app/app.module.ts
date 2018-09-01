@@ -13,6 +13,7 @@ import { TradeComponent } from './components/trade/trade.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
 import { SettingsComponent } from './components/settings/settings.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 const appRoutes: Routes = [
   {path:'',component:HomeComponent},
@@ -21,7 +22,8 @@ const appRoutes: Routes = [
   {path:'trade/:coinId',component:TradeComponent},
   {path:'profile',component:ProfileComponent},
   {path:'leaderboard',component:LeaderboardComponent},
-  {path:'settings',component:SettingsComponent}
+  {path:'settings',component:SettingsComponent},
+  {path:'**',component:PageNotFoundComponent}
 ];
 
 @NgModule({
@@ -32,7 +34,8 @@ const appRoutes: Routes = [
     TradeComponent,
     ProfileComponent,
     LeaderboardComponent,
-    SettingsComponent
+    SettingsComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

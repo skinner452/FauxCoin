@@ -6,17 +6,17 @@
 
   <div class="navbar-collapse collapse" id="navbarsExampleDefault">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/trade">Trade</a>
+        <a class="nav-link" [routerLink]="['/trade']" [routerLinkActive]="['active']">Trade</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/profile">Profile</a>
+        <a class="nav-link" [routerLink]="['/profile']" [routerLinkActive]="['active']">Profile</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/leaderboard">Leaderboard</a>
+        <a class="nav-link" [routerLink]="['/leaderboard']" [routerLinkActive]="['active']">Leaderboard</a>
       </li>
     </ul>
 

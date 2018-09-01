@@ -24,7 +24,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let coin of coins">
-      <th scope="row"><a class="deco-none" href="/trade/{{coin.id}}">{{coin.name}}</a></th>
+      <th scope="row"><a class="deco-none" [routerLink]="['/trade',coin.id]">{{coin.name}}</a></th>
       <td>{{coin.value}}</td>
       <td>{{coin.getChange()}}</td>
     </tr>

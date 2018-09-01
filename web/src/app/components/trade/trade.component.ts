@@ -25,9 +25,18 @@ export class TradeComponent implements OnInit {
   constructor(private route: ActivatedRoute, private apiService:ApiService) { }
 
   ngOnInit() {
-    this.coinId = this.route.snapshot.params['coinId'];
     this.loadCoins();
-    this.loadCoin();
+    this.loadUser();
+    this.route.params.subscribe((params) => {
+      this.coinId = this.route.snapshot.params['coinId'];
+      this.loadCoin();
+    });
+  }
+
+  loadUser(){
+    this.apiService.getUser(1).subscribe((user) => {
+      this.user = user;
+    });
   }
 
   loadCoins(){
@@ -38,9 +47,6 @@ export class TradeComponent implements OnInit {
 
   loadCoin(){
     if(this.coinId){
-      this.apiService.getUser(1).subscribe((user) => {
-        this.user = user;
-      });
       this.apiService.getUserCoin(1,this.coinId).subscribe((coin) => {
         this.coin = coin;
         this.coin.createChart(this.apiService,'#3cba9f');
