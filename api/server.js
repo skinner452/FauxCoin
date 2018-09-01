@@ -288,7 +288,7 @@ app.post('/api/sell/:coinId', function(req, res) {
         sqlQuery(sql,data,res,function(result){
           if(result.length){
             var coinValue = result[0].value;
-            var totalValue = coinValue*amount;
+            var totalValue = coinValue*amount*1.01;
             
             sql = "UPDATE user SET funds = funds + ? WHERE id=?"
             data = [totalValue,userId];

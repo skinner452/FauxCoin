@@ -66,7 +66,7 @@ export class TradeComponent implements OnInit {
   updateSellTotal(){
     let value = Number(this.sellModel['value']);
     let amount = Number(this.sellModel['amount']);
-    this.sellModel['total'] = value*amount;
+    this.sellModel['total'] = value*amount*1.01;
   }
 
   onBuy(){
