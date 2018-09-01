@@ -28,7 +28,7 @@ export class TradeComponent implements OnInit {
     this.loadCoins();
     this.loadUser();
     this.route.params.subscribe((params) => {
-      this.coinId = this.route.snapshot.params['coinId'];
+      this.coinId = params['coinId'];
       this.loadCoin();
     });
   }
