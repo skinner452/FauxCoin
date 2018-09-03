@@ -1,0 +1,9 @@
+.tradesTable {
+  height: 400px;
+  overflow-y: scroll;
+}
+
+.coinsTable {
+  height: 300px;
+  overflow-y: scroll;
+}

@@ -1,17 +1,19 @@
-<table class="table table-striped">
-  <thead class="thead-dark">
-    <th scope="col" width="80%">Coin</th>
-    <th scope="col">Value</th>
-    <th scope="col">Change (24h)</th>
-  </thead>
-  <tbody>
-    <tr *ngFor="let coin of coins">
-      <th scope="row"><a class="deco-none" [routerLink]="['/trade',coin.id]">{{coin.name}}</a></th>
-      <td>{{coin.value}}</td>
-      <td class="{{ coin.getColor() }}">{{coin.getChange()}}</td>
-    </tr>
-  </tbody>
-</table>
+<div class="coinsTable table-responsive">
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <th scope="col" width="80%">Coin</th>
+      <th scope="col">Value</th>
+      <th scope="col">Change (24h)</th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let coin of coins">
+        <th scope="row"><a class="deco-none" [routerLink]="['/trade',coin.id]">{{coin.name}}</a></th>
+        <td>{{coin.value}}</td>
+        <td class="{{ coin.getColor() }}">{{coin.getChange()}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <div *ngIf="coin">
   <div class="row">
@@ -21,20 +23,22 @@
     </div>
     <div class="col-md-3">
       <h2>Trades</h2>
-      <table class="table table-striped" style="text-align: center">
-        <thead class="thead-dark">
-          <th scope="col">Amount</th>
-          <th scope="col">Value</th>
-          <th scope="col">Total</th>
-        </thead>
-        <tbody>
-          <tr *ngFor="let trade of trades" class="{{ trade.getRowClass() }}">
-            <td width="34%">{{ trade.amount }}</td>
-            <td width="33%">{{ trade.coinValue }}</td>
-            <td width="33%">{{ trade.getTotal() }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="tradesTable table-responsive">
+        <table class="table table-striped text-center">
+          <thead class="thead-dark">
+            <th scope="col">Amount</th>
+            <th scope="col">Value</th>
+            <th scope="col">Total</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let trade of trades" class="{{ trade.getRowClass() }}">
+              <td width="34%">{{ trade.amount }}</td>
+              <td width="33%">{{ trade.coinValue }}</td>
+              <td width="33%">{{ trade.getTotal() }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -55,7 +59,7 @@
             <label for="buyTotal">Total</label>
             <input type="text"  class="form-control" id="buyTotal" [(ngModel)]="buyModel.total" name="buyTotal" disabled>
           </div>
-          <button type="submit" class="btn btn-success" style="width:100%">Buy</button>
+          <button type="submit" class="btn btn-success w-100">Buy</button>
       </form>
     </div>
     <div class="col-md-6">
@@ -74,7 +78,7 @@
             <label for="sellTotal">Total</label>
             <input type="text"  class="form-control" id="sellTotal" [(ngModel)]="sellModel.total" name="sellTotal" disabled>
           </div>
-          <button type="submit" class="btn btn-success" style="width:100%">Sell</button>
+          <button type="submit" class="btn btn-success w-100">Sell</button>
       </form>
     </div>
   </div>
