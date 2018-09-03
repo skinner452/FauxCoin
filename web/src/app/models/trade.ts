@@ -18,4 +18,10 @@ export class Trade {
   getTotal(){
     return this.amount * this.coinValue;
   }
+
+  getRowClass(){
+    if(this.type == 1) return "table-success";
+    if(this.type == 2) return "table-danger";
+    return "";
+  }
 }

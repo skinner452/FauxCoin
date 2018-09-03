@@ -35,6 +35,16 @@ export class Coin {
     }
   }
 
+  getColor(){
+    if(this.value-this.value24h > 0){
+      return "text-success";
+    }
+    if(this.value-this.value24h > 0){
+      return "text-warning";
+    }
+    return "";
+  }
+
   createChart(apiService,color){
     apiService.getCoinValues(this.id).subscribe((values) => {
       let dates = values.map(value => value.date);

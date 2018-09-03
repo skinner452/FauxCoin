@@ -8,7 +8,7 @@
     <tr *ngFor="let coin of coins">
       <th scope="row"><a class="deco-none" [routerLink]="['/trade',coin.id]">{{coin.name}}</a></th>
       <td>{{coin.value}}</td>
-      <td>{{coin.getChange()}}</td>
+      <td class="{{ coin.getColor() }}">{{coin.getChange()}}</td>
     </tr>
   </tbody>
 </table>
@@ -28,7 +28,7 @@
           <th scope="col">Total</th>
         </thead>
         <tbody>
-          <tr *ngFor="let trade of trades">
+          <tr *ngFor="let trade of trades" class="{{ trade.getRowClass() }}">
             <td width="34%">{{ trade.amount }}</td>
             <td width="33%">{{ trade.coinValue }}</td>
             <td width="33%">{{ trade.getTotal() }}</td>
