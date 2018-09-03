@@ -82,6 +82,7 @@ export class TradeComponent implements OnInit {
         this.buyModel['amount'] = '';
         this.buyModel['total'] = '';
         this.loadCoin();
+        this.loadUser();
       }
     });
   }
@@ -93,6 +94,7 @@ export class TradeComponent implements OnInit {
         this.sellModel['amount'] = '';
         this.sellModel['total'] = '';
         this.loadCoin();
+        this.loadUser();
       }
     });
   }

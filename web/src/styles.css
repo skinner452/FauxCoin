@@ -9,3 +9,10 @@ a.deco-none {
   color: inherit;
   text-decoration:none;
 }
+
+.vl {
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  height: 50px;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
