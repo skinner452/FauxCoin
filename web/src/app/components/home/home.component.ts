@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Coin } from '../../models/coin';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-home',
@@ -8,12 +9,22 @@ import { Coin } from '../../models/coin';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  user:User;
   coins:Coin[];
 
   constructor(private apiService:ApiService) { }
 
   ngOnInit() {
+    this.loadUser();
     this.loadCoins();
+  }
+
+  loadUser() {
+    this.apiService.getUser(1).subscribe((user) => {
+      this.user = user;
+
+      user.createChart(this.apiService,'#000000');
+    });
   }
 
   loadCoins(){

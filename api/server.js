@@ -139,7 +139,7 @@ app.get('/api/users/:userId', function(req, res) {
 });
 
 app.get('/api/users/:userId/values', function(req, res) {
-  var sql = "SELECT value,date FROM user_value WHERE user_id=?";
+  var sql = "SELECT value,date FROM user_value WHERE user_id=? AND date>now()-INTERVAL 24 HOUR";
   var data = [req.params.userId];
   sqlQuery(sql,data,res,function(result){
     success(res,{values:result});
@@ -407,6 +407,21 @@ schedule.scheduleJob('*/5 * * * *', function(){
         var sql = "INSERT INTO user_value (user_id,value) VALUES (?,?)";
         var data = [user.id,value];
         sqlQuery(sql,data,null,function(result){});
+
+        var sql = "UPDATE user SET value=? WHERE id=?";
+        var data = [value,user.id];
+        sqlQuery(sql,data,null,function(result){});
+
+        // get value closest to 24h from now
+        var sql = "SELECT value FROM coin_value WHERE coin_id=? ORDER BY abs(date-(now()-INTERVAL 24 HOUR)) LIMIT 1";
+        var data = [user.id];
+        sqlQuery(sql,data,null,function(userValues){
+          var value24h = 0;
+          if(userValues.length > 0) value24h = userValues[0].value;
+          var sql = "UPDATE user SET value24h=? WHERE id=?";
+          var data = [value24h,user.id];
+          sqlQuery(sql,data,null,function(result){});
+        });
       });
     }
   });

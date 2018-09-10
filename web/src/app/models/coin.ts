@@ -39,8 +39,8 @@ export class Coin {
     if(this.value-this.value24h > 0){
       return "text-success";
     }
-    if(this.value-this.value24h > 0){
-      return "text-warning";
+    if(this.value-this.value24h < 0){
+      return "text-danger";
     }
     return "";
   }

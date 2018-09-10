@@ -16,12 +16,20 @@ export class Trade {
   }
 
   getTotal(){
-    return this.amount * this.coinValue;
+    return Math.round((this.amount * this.coinValue)*100000)/100000;
   }
 
   getRowClass(){
     if(this.type == 1) return "table-success";
     if(this.type == 2) return "table-danger";
     return "";
+  }
+
+  getAmount(){
+    return Math.round(this.amount*100000)/100000;
+  }
+
+  getCoinValue(){
+    return Math.round(this.coinValue*100000)/100000;
   }
 }

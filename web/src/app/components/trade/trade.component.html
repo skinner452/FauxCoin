@@ -32,8 +32,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let trade of trades" class="{{ trade.getRowClass() }}">
-              <td width="34%">{{ trade.amount }}</td>
-              <td width="33%">{{ trade.coinValue }}</td>
+              <td width="34%">{{ trade.getAmount() }}</td>
+              <td width="33%">{{ trade.getCoinValue() }}</td>
               <td width="33%">{{ trade.getTotal() }}</td>
             </tr>
           </tbody>
@@ -59,7 +59,9 @@
             <label for="buyTotal">Total</label>
             <input type="text"  class="form-control" id="buyTotal" [(ngModel)]="buyModel.total" name="buyTotal" disabled>
           </div>
-          <button type="submit" class="btn btn-success w-100">Buy</button>
+          <div class="form-group">
+            <button type="submit" class="btn btn-success w-100">Buy</button>
+          </div>
       </form>
     </div>
     <div class="col-md-6">
@@ -78,7 +80,9 @@
             <label for="sellTotal">Total</label>
             <input type="text"  class="form-control" id="sellTotal" [(ngModel)]="sellModel.total" name="sellTotal" disabled>
           </div>
-          <button type="submit" class="btn btn-success w-100">Sell</button>
+          <div class="form-group">
+            <button type="submit" class="btn btn-success w-100">Sell</button>
+          </div>
       </form>
     </div>
   </div>
