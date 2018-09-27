@@ -53,6 +53,22 @@ export class ApiService {
     }));
   }
 
+  getUserCoins(userId:number,args:Object): Observable<Coin[]>{
+    let url:string = API_URL + "/users/" + userId + "/coins" + this.getQueryParams(args);
+    return this.http.get(url).pipe(map(res => {
+      let coins = [];
+      if(res.json().data){
+        let array = res.json().data.coins;
+        array.forEach(object => {
+          coins.push(new Coin(object));
+        });
+        return coins;
+      } else {
+        return null;
+      }
+    }));
+  }
+
   getCoin(id:number): Observable<Coin>{
     let url:string = API_URL + "/coins/" + id;
     return this.http.get(url).pipe(map(res => {
@@ -100,6 +116,14 @@ export class ApiService {
         });
       }
       return trades;
+    }));
+  }
+
+  getTradeCount(args:Object): Observable<Number>{
+    args['count'] = 1;
+    let url:string = API_URL + "/trades" + this.getQueryParams(args);
+    return this.http.get(url).pipe(map(res => {
+      return res.json().data['count'];
     }));
   }
 

@@ -14,8 +14,29 @@ export class Coin {
     this.name = json.name;
     this.value = json.value;
     this.value24h = json.value24h;
-
     this.amount = json.amount;
+  }
+
+  getValue(){
+    return Math.round(this.value*100000)/100000;
+  }
+
+  getAmount(){
+    if(this.amount){
+      return Math.round(this.amount*100000)/100000;
+    } else {
+      return 0;
+    }
+  }
+
+  getTotal(){
+    if(this.amount){
+      let total = this.value*this.amount;
+      total = Math.round(total*100000)/100000;
+      return total;
+    } else {
+      return 0;
+    }
   }
   
   getChange(){

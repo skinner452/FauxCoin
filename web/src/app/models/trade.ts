@@ -3,6 +3,7 @@ export class Trade {
   userId:number;
   type:number;
   amount:number;
+  coinName:string;
   coinValue:number;
   date:string;
 
@@ -11,6 +12,7 @@ export class Trade {
     this.userId = json.user_id;
     this.type = json.type;
     this.amount = json.amount;
+    this.coinName = json.coin_name;
     this.coinValue = json.coin_value;
     this.date = json.date;
   }
@@ -31,5 +33,9 @@ export class Trade {
 
   getCoinValue(){
     return Math.round(this.coinValue*100000)/100000;
+  }
+
+  getDate(){
+    return new Date(this.date).toLocaleString()
   }
 }

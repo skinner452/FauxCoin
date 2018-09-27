@@ -1,4 +1,4 @@
-<div class="mb-5" align="center">
+<div class="mb-5" align="center" *ngIf="user">
   <h3>Account value</h3>
   <h2>{{ user.value }}</h2>
   <canvas id="user-chart">{{ user.chart }}</canvas>
